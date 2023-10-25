@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<div class="container">
+    <form action="{{ url_for('reviews.create', book_id=book_id) }}" method="post" class="d-flex justify-content-center flex-column my-4">
+        <div class="mb-2">
+            <select name="rating" id="rating" class="form-select">
+                <option value="5" selected>Отлично</option>
+                <option value="4">Хорошо</option>
+                <option value="3">Удовлетворительно</option>
+                <option value="2">Неудовлетворительно</option>
+                <option value="1">Плохо</option>
+                <option value="0">Ужасно</option>
+            </select>
+        </div>
+        <div class="mb-2">
+            <label for="text">Описание</label>
+            <textarea id="text" name="text"></textarea>
+        </div>
+        <button type="submit" class="btn btn-orange">Добавить</button>
+    </form>
+</div>
+
+<script>
+    const easyMDE = new EasyMDE({element: document.getElementById('text')});
+</script>
+{% endblock %}

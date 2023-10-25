@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% from 'macros_book.html' import macro_book with context %}
+{% from 'macros_review.html' import macro_review with context %}
+
+
+
+{% block content %}
+<div class="container">
+
+    <div class="d-flex flex-wrap justify-content-center mt-4">
+        {{ macro_book(book, detailed=True) }}
+        {% if current_user.is_authenticated %}
+            <div id="reviews" class="container row border border-dark rounded-2 p-3 my-3">
+            {% if current_user.can_write_review(book.id) %}
+                    <a href="{{ url_for('reviews.create_form', book_id=book.id) }}" class="btn btn-orange">Написать рецензию</a>
+                {% else %}
+                <h4>Вы уже писали рецензию на данную книгу</h4>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% for review in reviews %}
+            {{ macro_review(review) }}
+        {% endfor %}
+    </div>
+
+</div>
+
+
+{% endblock %}

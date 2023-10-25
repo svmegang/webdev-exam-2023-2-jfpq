@@ -1,0 +1,20 @@
+{% macro macro_review(review) %}
+
+<div class="w-75 border border-dark rounded-2 p-3 my-2">
+    <div class="container">
+        <span><span class="fw-bold fs-5">★{{ review.rating }} {{ review.author  }}</span><span class="text-secondary fs-6">{{ review.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+        {% if review.user_id == current_user.id %}
+            <form action="{{ url_for('reviews.delete', review_id=review.id) }}" method="post">
+                <input id="delete-btn" type="submit" class="d-none">
+            </form>
+            <label for="delete-btn" class="btn btn-danger p-1">Удалить</label>
+        {% endif %}
+        </span>
+        <hr>
+        <p>
+            {{ review.text|markdown }}
+        </p>
+    </div>
+</div>
+
+{% endmacro %}

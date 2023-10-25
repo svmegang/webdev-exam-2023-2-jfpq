@@ -1,0 +1,39 @@
+{% macro macro_book(book, detailed=False) %}
+
+<div class="container row border border-dark rounded-2 p-3 mt-2">
+    <div class="col-md-6">
+        <img src="{{ book.cover.url }}" alt="book_img" class="rounded img-fluid">
+    </div>
+    <div class="col-md-6 row text-start">
+        <span><span class="fs-3 fw-bold">{{ book.title }}</span> <span class="fs-5">{{ book.author }}</span> {{ book.year }} ★{{ book.avg_rating|round(1) }}</span>
+        <ul class="list-group list-group-flush">
+            {% for genre in book.genres %}
+                <li class="list-group-item">{{ genre }}</li>
+            {% endfor %}
+        </ul>
+        <p>{{ book.short_desc|markdown }}</p>
+        <div class="w-100">
+
+            {% if not detailed %}
+                <a href="{{ url_for('books.detailed', book_id = book.id) }}" class="btn btn-orange w-100 m-2">Подробнее</a>
+            {% endif %}
+
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_administrator or current_user.is_moderator %}
+                    <a href="{{ url_for('books.edit_form', book_id = book.id) }}" class="btn btn-primary w-100 m-2">Изменить</a>
+                {% endif %}
+            {% endif %}
+            
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_administrator %}
+                <button type="button" class="btn btn-danger  w-100 m-2" data-bs-toggle="modal" data-bs-target="#modal" 
+                data-title="{{ book.title }}" data-action="{{ url_for('books.delete', book_id = book.id) }}">
+                    Удалить
+                    </button>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endmacro %}

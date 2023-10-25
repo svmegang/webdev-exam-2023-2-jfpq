@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import pagination %}
+{% from 'macros_book.html' import macro_book with context %}
+
+
+{% block content %}
+<div class="h-100 text-center d-flex flex-column p-3">
+    <div class="w-100">
+        <h1 class="mb-2">Книги</h1>
+                
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_administrator %}
+                <a href="{{ url_for('books.create_form') }}" class="btn btn-orange">Добавить</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="m-2">
+        <div class="d-flex flex-wrap justify-content-center">
+            {% if books %}
+                {% for book in books %}
+                  {{ macro_book(book) }}  
+                {% endfor %}
+                <div class="container d-flex justify-content-center mt-3">
+                    {{pagination(page, page_count, request.endpoint)}}
+                  </div>
+            {% else %}
+            
+            <h3>Книги не найдены</h3>
+            {% endif %}
+    </div>
+</div>
+{% if current_user.is_authenticated %}
+    {% if current_user.is_administrator %}
+  
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="book_title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+            <h4>Вы действительно хотите удалить информацию о книге?</h4>
+            <form action="" method="POST" id="form-delete">
+              <input type="submit" id="submit-btn" class="d-none">
+          </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <label for="submit-btn"  class="btn btn-danger">Подтвердить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+{% endif %}
+{% endblock %}
